@@ -1,7 +1,11 @@
+#define DEBUG
+
+//Actually it's the sound envelope, so no need for post-processing, except a log scaling
 #define SOUND A0
 
 #define PWM_PERIOD 50UL //us
 #define LEDS 10
+//LEDs pins, from low to high
 const int LEDS_PINS[LEDS] = {9, 10, 11, 8, 7, 6, 5, 4, 3, 2};
 //0: OFF, 255: Fully ON
 const unsigned char SOFT_PWM[LEDS] = {50, 50, 50, 50, 50, 255, 255, 255, 200, 200};
@@ -15,11 +19,16 @@ long sum = 0;
 
 
 void setup() {
+  //The analog reference controls the gain
   analogReference(EXTERNAL);
   
   for(int i=0; i<LEDS; i++){
     pinMode(LEDS_PINS[i], OUTPUT);
   }
+
+#ifdef DEBUG
+  Serial.begin(115200);
+#endif
 }
 
 
@@ -36,9 +45,16 @@ void loop() {
     
     int discarded = sample();
     int current = samples[head];
+    int rawPeak = maxSample();
     
-    value = map(current/*avgSample(discarded, current)*/, 0, 1023, 0, 10);
-    peak = map(maxSample(), 0, 1023, 0, 10);
+    value = map(current, 0, 1023, 0, 10);
+    //value = map(avgSample(discarded, current)*/, 0, 1023, 0, 10);
+    //value = mapLog(current, rawPeak);
+    peak = map(rawPeak, 0, 1023, 0, 10);
+    
+#ifdef DEBUG
+  Serial.println(String(current)+" "+String(rawPeak));
+#endif
   }
   
   if(micros() > (pwmTimer+PWM_PERIOD))
@@ -48,6 +64,11 @@ void loop() {
     bargraph(value, peak);
   }
 
+}
+
+int mapLog(int value, int peak){
+  float l = 20*log10((float)value/(float)peak);
+  return 10+(int)l;
 }
 
 
@@ -73,7 +94,7 @@ int avgSample(int discarded, int current){
   return sum/SAMPLES;
 }
 
-
+//Return the max of all samples
 int maxSample(){
   int peak = 0;
   
@@ -86,7 +107,9 @@ int maxSample(){
   return peak;
 }
 
-
+//Light up the LEDs in row, bargraph style
+//Also light up the peak LED
+//And dim the brightness with software generated PWM
 void bargraph(int value, int peak){
   static unsigned char counter = 0;
   
