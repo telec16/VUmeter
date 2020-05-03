@@ -1,9 +1,11 @@
+//https://blog.yavilevich.com/2016/08/arduino-sound-level-meter-and-spectrum-analyzer/
+
 #define DEBUG
 
 //Actually it's the sound envelope, so no need for post-processing, except a log scaling
 #define SOUND A0
 
-#define PWM_PERIOD 50UL //us
+#define PWM_PERIOD 32UL //us
 #define LEDS 10
 //LEDs pins, from low to high
 const int LEDS_PINS[LEDS] = {9, 10, 11, 8, 7, 6, 5, 4, 3, 2};
