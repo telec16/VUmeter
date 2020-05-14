@@ -10,7 +10,8 @@ Well yes, but no. This one is made on a glass panel!
 
 # Video and tutorial
 
-Incomming...
+* Video: https://youtu.be/GH0fDdruJ4g
+* Instructable: https://www.instructables.com/id/Glass-VU-meter
 
 # Sources
 
