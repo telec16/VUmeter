@@ -14,5 +14,5 @@ Incomming...
 
 # Sources
 
-https://blog.yavilevich.com/2016/08/arduino-sound-level-meter-and-spectrum-analyzer/
-https://ez.analog.com/dsp/sigmadsp/f/q-a/67344/choosing-capacitors-for-audio-path
+* https://blog.yavilevich.com/2016/08/arduino-sound-level-meter-and-spectrum-analyzer/
+* https://ez.analog.com/dsp/sigmadsp/f/q-a/67344/choosing-capacitors-for-audio-path
